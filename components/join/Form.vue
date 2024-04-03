@@ -4,11 +4,11 @@
       <div class="completion">
         <div class="entrance">
 
-          <input type="text" placeholder="Логин">
+          <input v-model="username" type="text" placeholder="Логин">
           
           <br>
 
-          <input type="password" placeholder="Пароль">
+          <input v-model="password" type="password" placeholder="Пароль">
 
           <br>
           
@@ -16,7 +16,7 @@
         </div>
 
         <div class="join">
-          <button>Войти</button>
+          <button @click="postUserData()" >Войти</button>
         </div>
 
         <div class="registration">
@@ -94,3 +94,27 @@
     color: rgb(0, 42, 255);
   }
 </style>
+
+<script setup>
+  const username = ref('');
+  const password = ref('');
+
+  async function postUserData() {
+    const user = {
+      name: username.value,
+      password: password.value,
+      token: Date.now()
+    }
+    localStorage.setItem('token', user.token);
+
+  const res = await fetch('http://localhost:3001/base/data-base', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(user),
+    });
+  
+  const data = await res.json();
+  }
+</script>
